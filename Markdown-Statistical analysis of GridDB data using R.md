@@ -431,7 +431,7 @@ The bar plot looks like this:-  \
 
 
 
-![alt_text](images/cause_death.png "image_tooltip")
+![alt_text](images/cause-death.png "image_tooltip")
 
 
 
