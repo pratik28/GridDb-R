@@ -96,13 +96,13 @@ print(str(json.loads(r.text)['count']) + ' rows have been registered in the cont
 
 
 #Fetch(Query) Top 10 countries with the highest per capita income , the indicator_code for which is NY.GNP.PCAP.CD. 
-my_sql_query1 = '(f"""SELECT country_name, country_code,  score_2015 FROM Global_Health_Nutrition where indicator_code=\'NY.GNP.PCAP.CD\' ORDER BY score_2015 DESC LIMIT 10 """) '
+# Directly putting SQL to avoid + operator ... my_sql_query1 = '(f"""SELECT country_name, country_code,  score_2015 FROM Global_Health_Nutrition where indicator_code=\'NY.GNP.PCAP.CD\' ORDER BY score_2015 DESC LIMIT 10 """) '
 
 #To retieve data from a GridDB container, the GridDB Web API Query URL must be suffied with "/sql" 
 my_query_url = base_url + '/sql' 
 
 #Construct the request body 
-query_request_body = '[{"type":"sql-select", "stmt":"'+my_sql_query1+'", "limit" : 10}]' 
+query_request_body = '[{"type":"sql-select", "stmt":"SELECT country_name, country_code, score_2015 FROM Global_Health_Nutrition2 where indicator_code=\'NY.GNP.PCAP.CD\' ORDER BY score_2015 " , "limit":"10" }]' 
 # print(query_request_body ) 
 #Invoke the GridDB WebAPI request 
 qr1 <- GET (url = my_query_url, 
