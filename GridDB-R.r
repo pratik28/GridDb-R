@@ -19,53 +19,42 @@ print(r)
 
 #Construct a data object to hold the request body (i.e., the container that needs to be created)  
 
-my_data_obj = '{ 
-	"container_name":"Global_Health_Nutrition"  , 
-	"container_type":"COLLECTION" ,   
-	"rowkey": False,   
-	"columns": [
-	{ "name": "country_name" "type": " STRING" }, 
-	{ "name": "country_code"	"type": "STRING" },  
-	{"name": "indicator_name" "type": "STRING"},    
-	{
-	"name": "indicator_code"
-	"type": "STRING "
-    	},    
-	{
-	"name": "1960"
-	"type": "FLOAT"
-    	},    
-	{
-	"name": "score_1961"
-	"type": "FLOAT"
-    	},    
-	{
-	"name": "score_1962"
-	"type": "FLOAT"
-    	},  
-		{
-	"name": "score_1963"
-	"type": "FLOAT"
-    	}, 
-		{
-	"name": "score_1964"
-	"type": "FLOAT"
-    	}, 
-		{
-	"name": "score_1965"
-	"type": "FLOAT"
-    	}, 
-		{
-	"name": "score_1966"
-	"type": "FLOAT"
-    	},
-		{"name": "score_1967" 	"type": "FLOAT"},{"name": "score_1968" 	"type": "FLOAT"},{"name": "score_1969" 	"type": "FLOAT"},{"name": "score_1970" 	"type": "FLOAT"},{"name": "score_1971" 	"type": "FLOAT"},{"name": "score_1972" 	"type": "FLOAT"},{"name": "score_1973" 	"type": "FLOAT"},{"name": "score_1974" 	"type": "FLOAT"},{"name": "score_1975" 	"type": "FLOAT"},{"name": "score_1976" 	"type": "FLOAT"},{"name": "score_1977" 	"type": "FLOAT"},{"name": "score_1978" 	"type": "FLOAT"},{"name": "score_1979" 	"type": "FLOAT"},{"name": "score_1980" 	"type": "FLOAT"},{"name": "score_1981" 	"type": "FLOAT"},{"name": "score_1982" 	"type": "FLOAT"},{"name": "score_1983" 	"type": "FLOAT"},{"name": "score_1984" 	"type": "FLOAT"},{"name": "score_1985" 	"type": "FLOAT"},{"name": "score_1986" 	"type": "FLOAT"},{"name": "score_1987" 	"type": "FLOAT"},{"name": "score_1988" 	"type": "FLOAT"},{"name": "score_1989" 	"type": "FLOAT"},{"name": "score_1990" 	"type": "FLOAT"},{"name": "score_1991" 	"type": "FLOAT"},{"name": "score_1992" 	"type": "FLOAT"},{"name": "score_1993" 	"type": "FLOAT"},{"name": "score_1994" 	"type": "FLOAT"},{"name": "score_1995" 	"type": "FLOAT"},{"name": "score_1996" 	"type": "FLOAT"},{"name": "score_1997" 	"type": "FLOAT"},{"name": "score_1998" 	"type": "FLOAT"},{"name": "score_1999" 	"type": "FLOAT"},{"name": "score_2000" 	"type": "FLOAT"},{"name": "score_2001" 	"type": "FLOAT"},{"name": "score_2002" 	"type": "FLOAT"},{"name": "score_2003" 	"type": "FLOAT"},{"name": "score_2004" 	"type": "FLOAT"},{"name": "score_2005" 	"type": "FLOAT"},{"name": "score_2006" 	"type": "FLOAT"},{"name": "score_2007" 	"type": "FLOAT"}, {"name": "score_2008" "type": "FLOAT"},{"name": "score_2009" 	"type": "FLOAT"},{"name": "score_2010" 	"type": "FLOAT"},{"name": "score_2011" 	"type": "FLOAT"},{"name": "score_2012" 	"type": "FLOAT"},{"name": "score_2013" 	"type": "FLOAT"},{"name": "score_2014" "type": "FLOAT" },  
-	{
-	"name": "score_2015"
-	"type": "FLOAT"
-    	}
-      ]  #End of container columns 
-  }'
+my_data_obj = ' {   	"container_name":"Global_Health_Nutrition2"  ,  	"container_type":"COLLECTION" ,    	"rowkey": false,    "columns": [  { "name": "country_name"  ,"type": 
+
+"STRING" },  { "name": "country_code"  ,"type": "STRING" },  {"name": "indicator_name" ,"type": "STRING"},    {"name": "indicator_code"  	 ,"type":"STRING" 	},  {"name": 
+
+"1960",  "type": "FLOAT" },   {	"name": "score_1961"  ,"type": "FLOAT" },    {	"name": "score_1962"  ,"type": "FLOAT" },  {	"name": "score_1963"  ,"type": "FLOAT"  	
+
+}, { "name": "score_1964" 	 ,"type": "FLOAT"  	}, {"name": "score_1965" 	 ,"type": "FLOAT"   	}, {"name": "score_1966" 	 ,"type": "FLOAT"  	},{"name": 
+
+"score_1967" 	 ,"type": "FLOAT"},{"name": "score_1968" 	 ,"type": "FLOAT"},{"name": "score_1969" 	,"type": "FLOAT"},{"name": "score_1970" 	,"type": 
+
+"FLOAT"},{"name": "score_1971" 	 ,"type": "FLOAT"},{"name": "score_1972" 	 ,"type": "FLOAT"},{"name": "score_1973" 	 ,"type": "FLOAT"},{"name": "score_1974" 	
+
+ ,"type": "FLOAT"},{"name": "score_1975" 	 ,"type": "FLOAT"},{"name": "score_1976" 	 ,"type":"FLOAT"},{"name": "score_1977"  ,"type": "FLOAT"},{"name": 
+
+"score_1978" 	 ,"type": "FLOAT"},{"name": "score_1979" 	 ,"type": "FLOAT"},{"name": "score_1980" ,"type": "FLOAT"},{"name": "score_1981" 	 ,"type": 
+
+"FLOAT"},{"name": "score_1982" 	 ,"type": "FLOAT"},{"name": "score_1983" 	 ,"type": "FLOAT"},{"name": "score_1984" 	 ,"type": "FLOAT"},{"name": "score_1985" 	
+
+ ,"type": "FLOAT"},{"name": "score_1986" 	 ,"type": "FLOAT"},{"name": "score_1987" 	 ,"type": "FLOAT"},{"name": "score_1988"  ,"type": "FLOAT"},{"name": 
+
+"score_1989" 	 ,"type": "FLOAT"},{"name": "score_1990" 	 ,"type": "FLOAT"},{"name": "score_1991" ,"type": "FLOAT"},{"name": "score_1992" 	 ,"type": 
+
+"FLOAT"},{"name": "score_1993" 	 ,"type": "FLOAT"},{"name": "score_1994" 	 ,"type": "FLOAT"},{"name": "score_1995" 	 ,"type": "FLOAT"},{"name": "score_1996" 	
+
+ ,"type": "FLOAT"},{"name": "score_1997" 	 ,"type": "FLOAT"},{"name": "score_1998" 	 ,"type": "FLOAT"},{"name": "score_1999" 	 ,"type": "FLOAT"},{"name": 
+
+"score_2000" 	 ,"type": "FLOAT"},{"name": "score_2001" 	 ,"type": "FLOAT"},{"name": "score_2002" ,"type": "FLOAT"},{"name": "score_2003" 	 ,"type": 
+
+"FLOAT"},{"name": "score_2004" 	 ,"type": "FLOAT"},{"name": "score_2005" 	 ,"type": "FLOAT"},{"name": "score_2006" 	 ,"type": "FLOAT"},{"name": "score_2007" 	
+
+ ,"type": "FLOAT"}, {"name": "score_2008"  ,"type": "FLOAT"},{"name": "score_2009" 	 ,"type":"FLOAT"},{"name": "score_2010"  ,"type": "FLOAT"},{"name": 
+
+"score_2011" 	 ,"type": "FLOAT"},{"name": "score_2012" 	 ,"type": "FLOAT"},{"name": "score_2013" 	,"type": "FLOAT"},{"name": "score_2014"  ,"type": "FLOAT" }, 
+
+ { 	"name": "score_2015"	 ,"type": "FLOAT"  	}     ]   	} ' 
+
 
 #Set up the GridDB WebAPI URL
 container_url = my_base_url + "/containers/"
@@ -102,7 +91,8 @@ print(str(json.loads(r.text)['count']) + ' rows have been registered in the cont
 my_query_url = base_url + '/sql' 
 
 #Construct the request body 
-query_request_body = '[{"type":"sql-select", "stmt":"SELECT country_name, country_code, score_2015 FROM Global_Health_Nutrition2 where indicator_code=\'NY.GNP.PCAP.CD\' ORDER BY score_2015 " , "limit":"10" }]' 
+query_request_body = ' [ {"type" : "sql-select" ,
+  "stmt" : "SELECT * FROM Global_Health_Nutrition2 where indicator_code='NY.GNP.PCAP.CD' ORDER BY score_2015 LIMIT 10 " } ]'  
 # print(query_request_body ) 
 #Invoke the GridDB WebAPI request 
 qr1 <- GET (url = my_query_url, 
