@@ -1,6 +1,6 @@
 
 
-		**Statistical analysis of GridDB data, using R**
+		*Statistical analysis of GridDB data, using R*
 
 **Introduction to GridDB. **
 
@@ -13,10 +13,10 @@ A group of such nodes is called "Cluster" , the cluster service is started when 
 
 
 
-![alt_text](images/arc_DataModel.png "image_tooltip")
+![alttext](images/arcDataModel.png "imagetooltip")
 
 
-@Source: [https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v4_3_2/GridDB_QuickStartGuide.html](https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v4_3_2/GridDB_QuickStartGuide.html) \
+@Source: [https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html](https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html) \
 
 
 Somewhat similar to the idea of a table in a relational database, GridDB gives the abstraction of a "container". 
@@ -70,7 +70,7 @@ The output of the sessionInfo() command looks like this on my windows machine.
 
 
 
-![alt_text](images/sessionInfo-output.png "image_tooltip")
+![alttext](images/sessionInfo-output.png "imagetooltip")
 
 
 You can see that the required packages were loaded under the "other attached packages:" section. 
@@ -95,24 +95,19 @@ The GridDB URLs are of the form :-  **'https://[host]/griddb/v2/[clustername]/db
 
 In my case, my base url looks like this:- 
 
-base_url = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gs_clustertrialxxxx/dbs/pratik"  
+baseurl = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gsclustertrialxxxx/dbs/pratik"  
 
-Lets first check if GridDb allows you a connection, we will check this via the checkConnection method of the Web API.  \
+Lets first check if GridDb allows you a connection, we will check this via the checkConnection method of the Web API.  
 
 
-_r &lt;- GET(_
+r &lt;- GET(
+	url = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gsclustertrialxxxx/dbs/pratik/checkConnection" ,
+     addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,     
+     config = authenticate("pratik", "MyPASS1234"), 
+     encode = "json" 
+  )
 
-_	url = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gs_clustertrialxxxx/dbs/pratik/checkConnection" , _
-
-_    add_headers("Content-Type" = "application/json; charset=UTF-8" ) ,      _
-
-_    config = authenticate("pratik", "MyPASS1234"), _
-
-_    encode = "json" _
-
-_  )_
-
-_print(r) _
+print( r )  
 
 If you see a "Status: 200" in the printed response, the server is ready to accept your connections. 
 
@@ -128,7 +123,7 @@ Below is a snippet about the same:-
 
 
 
-![alt_text](images/data-snapshot.png "image_tooltip")
+![alttext](images/data-snapshot.png "imagetooltip")
 
 
 Countries are given scores on many criteria like Health/Education/Income/Population ratios etc., it can be found here:- 
@@ -141,114 +136,48 @@ So, we send a POST request to the cluster with details of the container structur
 
 #Construct a data object to hold the request body (i.e., the container that needs to be created)
 
-_my_data_obj = {_
+mydataobj = { "containername": "GlobalHealthNutrition", 
 
-_    "container_name": "Global_Health_Nutrition", _
+    "containertype": "COLLECTION",
+    "rowkey": False,  
+    "columns": [
+	{	"name": "countryname""type": " STRING" 	},    
 
-_    "container_type": "COLLECTION",_
+	{ 	"name": "countrycode" 	"type": "STRING"  	},    
 
-_    "rowkey": False,  _
+	{ 	"name": "indicatorname" 	"type": "STRING"   	},    
+	
+	{	"name": "indicatorcode"	"type": " "    	},    
 
-_    "columns": [_
+	{	"name": "1960"	"type": "FLOAT"    	},    
 
-_	{_
+	{	"name": "score1961"	"type": "FLOAT"    	},    
 
-_	"name": "country_name"_
+	{	"name": "score1962"	"type": "FLOAT"    	},  
 
-_	"type": " STRING"_
+	....... 
 
-_    	},    _
+	......
 
-_	{_
+	{	"name": "score2014"	"type": "FLOAT"    	},  
 
-_	"name": "country_code"_
+	{	"name": "score2015"	"type": "FLOAT"    	}
+      ]  #End of container columns 
+  }
 
-_	"type": "STRING"_
+#Set up the GridDB WebAPI URL
 
-_    	},    _
+containerurl = baseurl + '/containers' 
 
-_	{_
+#Lets now invoke the POST request via GridDB WebAPI with the headers and the request body 
 
-_	"name": "indicator_name"_
-
-_	"type": "STRING"_
-
-_    	},    _
-
-_	{_
-
-_	"name": "indicator_code"_
-
-_	"type": " "_
-
-_    	},    _
-
-_	{_
-
-_	"name": "1960"_
-
-_	"type": "FLOAT"_
-
-_    	},    _
-
-_	{_
-
-_	"name": "score_1961"_
-
-_	"type": "FLOAT"_
-
-_    	},    _
-
-_	{_
-
-_	"name": "score_1962"_
-
-_	"type": "FLOAT"_
-
-_    	},  _
-
-_	....... _
-
-_	......_
-
-_	{_
-
-_	"name": "score_2014"_
-
-_	"type": "FLOAT"_
-
-_    	},  _
-
-_	{_
-
-_	"name": "score_2015"_
-
-_	"type": "FLOAT"_
-
-_    	}_
-
-_      ]  #End of container columns _
-
-_  }_
-
-_#Set up the GridDB WebAPI URL_
-
-_container_url = base_url + '/containers' _
-
-_#Lets now invoke the POST request via GridDB WebAPI with the headers and the request body _
-
-_r &lt;- POST(container_url, _
-
-_       add_headers("Content-Type" = "application/json; charset=UTF-8" ) ,      _
-
-_       config = authenticate("pratik", "MyPASS1234"), _
-
-_       encode = "json", _
-
-_      data= my_data_obj)_
+r &lt;- POST(containerurl, 
+       addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,    
+       config = authenticate("pratik", "MyPASS1234"), 
+       encode = "json", 
+      data= mydataobj)
 
 To check if the container was indeed created, you can use the "showcontainer" command, it will list all the containers in your database. 
-
 
 
 * Now lets define a function to insert data into the GridDB database. 
@@ -257,21 +186,19 @@ We will use R language's innate ability to process CSV files here.
 
 Instead of adding rows to a database table 1 by 1 OR creating a huge POST request, we just tell R to use a CSV file, and the language takes care of adding the rows on its own.  
 
-We use read_csv function of R, which reads a CSV and returns a **tibble** ( not a full fledged data frame), a tibble is a simple data structure and can easily be fed to a POST Web API 
+We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a full fledged data frame), a tibble is a simple data structure and can easily be fed to a POST Web API request. 
 
-request. 
+library(readr)
 
-_library(readr)_
+library(jsonlite)
 
-_library(jsonlite)_
+#import data in csv format
 
-_#import data in csv format_
+ghndata &lt;- readcsv("data.csv") 
 
-_ghn_data &lt;- read_csv("data.csv") _
+#Convert the CSV to Json format and verify it worked by printing
 
-_#Convert the CSV to Json format and verify it worked by printing_
-
-_ghn_data_JSON &lt;- toJSON(ghn_data) _
+ghndataJSON &lt;- toJSON(ghndata) 
 
 Now we have all the CSV data in JSON format, ready to be used in the web request. 
 
@@ -281,35 +208,26 @@ Also, GridDB's web API gives you a simple URL to PUT to when you want to add row
 
 It takes the form of :- 
 
-**base_url + '/containers/Container_Name/rows' **
+**baseurl + '/containers/ContainerName/rows' **
 
-So, for us insert_url = container_url+'Global_Health_Nutrition'+'/rows' OR  "base_url/containers/Global_Health_Nutrition/rows" 
+So, for us inserturl = containerurl+'GlobalHealthNutrition'+'/rows' OR  "baseurl/containers/GlobalHealthNutrition/rows" 
 
 We now have our PUT request for inserting rows(RowRegistration) as:- 
 
-_r &lt;- PUT(insert_url, _
+r &lt;- PUT(inserturl,  
+       addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,              config = authenticate("pratik", "MyPASS1234"),  
+					body = ghndataJSON ,  
+					encode = "json" )  
 
-_       add_headers("Content-Type" = "application/json; charset=UTF-8" ) ,      _
+#To check if all rows have been inserted
 
-_       config = authenticate("pratik", "MyPASS1234"), _
-
-_       body = ghn_data_JSON , _
-
-_       encode = "json" ) _
-
-_#To check if all rows have been inserted_
-
-_print(str(json.loads(x.text)['count']) + ' rows have been registered in the container Global_Health_Nutrition.')_
+print(str(json.loads(x.text)['count']) + ' rows have been registered in the container GlobalHealthNutrition.') 
 
 
-
-
-![alt_text](images/rows-inserted.png "image_tooltip")
-
+![alttext](images/rows-inserted.png "imagetooltip")
 
  
 We can populate more containers like this. 
-
 
 
 * QUERY data via SELECT - first check with a simple query 
@@ -318,52 +236,44 @@ We will try to assess some economic parameters of the countries in the World.
 
 So, some of the data which contains health/medical will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing.   
 
-**(i) **Let's check the countries with the highest per capita income , the indicator_code for which is **NY.GNP.PCAP.CD**.  \
+**(i) **Let's check the countries with the highest per capita income , the indicatorcode for which is **NY.GNP.PCAP.CD**.  
 
 
-_my_sql_query1 = (f"""SELECT country_name, country_code,  score_2015 FROM Global_Health_Nutrition where indicator_code='NY.GNP.PCAP.CD' """) _
+mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 "  
 
-_To retrieve data from a container, the URL must be suffixed with "/sql" , so our _
+We use a single "\\" to escape the single quote in the above statement. 
+To retrieve data from a container, the URL must be suffixed with "/sql" , so our 
 
-_my_query_url = base_url + '/sql' _
+myqueryurl = baseurl + '/sql' 
 
-_#Construct the request body,  remember we're using the web API and cannot use inbuilt R functions like dbGetQuery()/dbInsertTable(),  hence we construct the request as below. _
+#Construct the request body,  remember we're using the web API and cannot use inbuilt R functions like dbGetQuery()/dbInsertTable(),  hence we construct the request as below. 
 
-_//requests.post(url, data=query_request_body, headers=header_obj) _
 
-_query_request_body = '[{"type":"sql-select", "stmt":"'+my_sql_query1+'", "limit" : 10}]' _
+queryrequestbody = '[{"type":"sql-select", "stmt":"mysqlquery1"}]' 
 
-_#Invoke the GridDB WebAPI request _
+#Invoke the GridDB WebAPI request 
 
-_qr1 &lt;- GET (url = my_query_url, _
+qr1 &lt;- GET (url = myqueryurl, 
+            addheaders("Content-Type" = "application/json; charset=UTF-8" ),       config = authenticate("pratik", "MyPASS1234"),        body = queryrequestbody
+       )                              
 
-_       add_headers("Content-Type" = "application/json; charset=UTF-8" ) ,      _
-
-_       config = authenticate("pratik", "MyPASS1234"), _
-
-_       body = query_request_body_
-
-_       )                              _
-
-_print(qr1) _
+print(qr1) 
 
 The data that is returned is something like this:- 
 
 
+![alttext](images/Top10-per-capita.png "imagetooltip")
 
-![alt_text](images/Top10-per-capita.png "image_tooltip")
 
+ghndata &lt;- qr1  
 
-_ghn_data &lt;- qr1  \
-_
+We just copied the data in a data frame ghndata. 
 
-We just copied the data in a data frame ghn_data. 
-
-To get a subset of ghn_data, like all country names, we can just use _ghn_data$Country_Name_
+To get a subset of ghndata, like all country names, we can just use ghndata$CountryName
 
 Now let's plot this data using the barplot function of R.  
 
-Unless you visualise something via pictures/charts, the inherent message is either not very clear or you miss the audacity of the results.  
+Unless you visualize something via pictures/charts, the inherent message is either not very clear or you miss the audacity of the results.  
 
 The general syntax of this function is:- 
 
@@ -381,22 +291,20 @@ The general syntax of this function is:-
 
 **args.legend**: optional, determines where the legend will be placed and displayed.  
 
-# print ghn_data and country_names, just for illustrating the data , then plot the graph 
+# print ghndata and countrynames, just for illustrating the data , then plot the graph 
 
-_print(ghn_data ) _
+print(ghndata ) 
 
-_print(country_names)_
+print(countrynames)
 
-_barplot( ghn_data$Income, main="Top 10 Countries by per capita Income", names.arg = ghn_data$Country_Code  , xlab="CountryName", ylab="Per Capita Income", col="blue", _
-
-_args.legend="bottomright" )  _
+barplot( ghndata$Income, main="Top 10 Countries by per capita Income", names.arg = ghndata$CountryCode  , xlab="CountryName", ylab="Per Capita Income", col="blue", args.legend="bottomright" )  
 
 
 
 
 
 
-![alt_text](images/bar-graph-and-data.png "image_tooltip")
+![alttext](images/bar-graph-and-data.png "imagetooltip")
  
 
 The above image shows the data and the shortened bar graph, the actual full chart looks like this below. 
@@ -406,24 +314,22 @@ The above image shows the data and the shortened bar graph, the actual full char
 
 
 
-![alt_text](images/Full-bar-graph.png "image_tooltip")
+![alttext](images/Full-bar-graph.png "imagetooltip")
 
 
-**(ii)**  Let's fire another query on GridDB, and analyse the results via R and plot the results . 
+**(ii)**  Let's fire another query on GridDB, and analyze the results via R and plot the results . 
 
 We will find the top countries based on the factor "Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total) ". 
 
-This data, e.g., is important for organisations working on public health, specially in poorer countries. 
+This data, e.g., is important for organizations working on public health, specially in poorer countries. 
 
 Keeping the other calls same, we just change the query to ( only bottom 20 results) :- 
 
-_my_sql_query2 = (f"""SELECT country_name, country_code,  score_2014 FROM Global_Health_Nutrition where indicator_code='SH.DTH.COMM.ZS' ORDER BY score_2014 DESC  LIMIT 20 """) _
+mysqlquery2 =  "SELECT countryname, countrycode,  score2014 FROM GlobalHealthNutrition where indicatorcode=\\'SH.DTH.COMM.ZS\\' ORDER BY score2014 DESC  LIMIT 20 " 
 
 Our bar plot function will look like:- 
 
-_barplot( ghn_data$Percent, main="Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions", names.arg = ghn_data$CountryCode  , _
-
-_xlab="CountryName", ylab="Percent of Total", col="blue", args.legend="bottomright" ) _
+barplot( ghndata$$Percent, main="Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions", names.arg = ghndata$CountryCode, xlab="CountryName", ylab="Percent of Total", col="blue", args.legend="bottomright" ) 
 
 The bar plot looks like this:-  \
 
@@ -431,7 +337,7 @@ The bar plot looks like this:-  \
 
 
 
-![alt_text](images/cause-death.png "image_tooltip")
+![alttext](images/causedeath.png "imagetooltip")
 
 
 
