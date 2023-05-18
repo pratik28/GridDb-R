@@ -1,6 +1,6 @@
 
 
-		**<span style="text-decoration:underline;">Statistical analysis of GridDB data, using R</span>**
+		**Statistical analysis of GridDB data, using R**
 
 **Introduction to GridDB. **
 
