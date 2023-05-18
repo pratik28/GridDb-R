@@ -13,7 +13,7 @@ A group of such nodes is called "Cluster" , the cluster service is started when 
 
 
 
-![alttext](images/arcDataModel.png "imagetooltip")
+![alttext](images/arc_DataModel.png "imagetooltip")
 
 
 @Source: [https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html](https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html) \
@@ -337,7 +337,7 @@ The bar plot looks like this:-  \
 
 
 
-![alttext](images/causedeath.png "imagetooltip")
+![alttext](images/cause-death.png "imagetooltip")
 
 
 
