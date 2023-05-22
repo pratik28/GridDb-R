@@ -103,7 +103,7 @@ Lets first check if GridDb allows you a connection, we will check this via the c
      addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,     
      config = authenticate("pratik", "MyPASS1234"), 
      encode = "json" 
-  )
+      )
 
     print( r )  
 
