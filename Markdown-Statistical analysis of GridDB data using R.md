@@ -1,8 +1,8 @@
 
 
-		*Statistical analysis of GridDB data, using R*
+		Statistical analysis of GridDB data, using R
 
-**Introduction to GridDB. **
+**Introduction to GridDB.**
 
 GridDB is an in-memory database, that allows a vast quantity of data to be stored and searched quickly and safely..
 
@@ -98,7 +98,7 @@ In my case, my base url looks like this:-
 Lets first check if GridDb allows you a connection, we will check this via the checkConnection method of the Web API.  
 
 
-    r &lt;- GET(
+    r <- GET(
 	url = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gsclustertrialxxxx/dbs/pratik/checkConnection" ,
      addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,     
      config = authenticate("pratik", "MyPASS1234"), 
@@ -169,7 +169,7 @@ So, we send a POST request to the cluster with details of the container structur
 
     #Lets now invoke the POST request via GridDB WebAPI with the headers and the request body 
 
-    r &lt;- POST(containerurl, 
+    r <- POST(containerurl, 
        addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,    
        config = authenticate("pratik", "MyPASS1234"), 
        encode = "json", 
@@ -192,11 +192,11 @@ We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a
 
     #import data in csv format
 
-    ghndata &lt;- readcsv("data.csv") 
+    ghndata <- readcsv("data.csv") 
 
     #Convert the CSV to Json format and verify it worked by printing
 
-    ghndataJSON &lt;- toJSON(ghndata) 
+    ghndataJSON <- toJSON(ghndata) 
 
 Now we have all the CSV data in JSON format, ready to be used in the web request. 
 
