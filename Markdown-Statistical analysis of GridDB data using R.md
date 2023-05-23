@@ -35,7 +35,7 @@ Within a database, there might be multiple containers, akin to tables in a relat
 
 These containers hold the data in rows. 
 
-**Introduction to R **
+**Introduction to R 
 
 R is a modern programming language, suitable for complex mathematical calculations, statistical analysis, creating charts and machine learning models. . 
 
@@ -51,7 +51,7 @@ We will discuss how you can create containers and save data in GridDb via its We
 
 
 
-* Install R and HTTR package and other packages 
+*Install R and HTTR package and other packages 
 
 You can load additional packages via the "Load Packages" menu option under the "Packages" menu. 
 
@@ -83,7 +83,7 @@ If you want to do this from the R command line instead, use the below commands t
 
     install.packages('jsonlite')
 
-    * Connect to GridDb via HTTPS connection ( Web API). 
+    *Connect to GridDb via HTTPS connection ( Web API).  
 
 This method gives maximum flexibility and ease as you're not dependent on any driver or technology to connect to the database.  
 
@@ -113,7 +113,7 @@ While we're checking the web based access, we also confirm that secure authentic
 
 
 
-* The data to be used 
+*The data to be used 
 
 The data that we are going to use for this demonstration is about some economic and demographic parameters, measured in the world's major countries between 1960-2015. 
 
@@ -178,7 +178,7 @@ So, we send a POST request to the cluster with details of the container structur
 To check if the container was indeed created, you can use the "showcontainer" command, it will list all the containers in your database. 
 
 
-* Now lets define a function to insert data into the GridDB database. 
+Now lets define a function to insert data into the GridDB database. 
 
 We will use R language's innate ability to process CSV files here. 
 
@@ -206,7 +206,7 @@ Also, GridDB's web API gives you a simple URL to PUT to when you want to add row
 
 It takes the form of :- 
 
-**baseurl + '/containers/ContainerName/rows' **
+**baseurl + '/containers/ContainerName/rows'
 
 So, for us inserturl = containerurl+'GlobalHealthNutrition'+'/rows' OR  "baseurl/containers/GlobalHealthNutrition/rows" 
 
@@ -228,14 +228,13 @@ We now have our PUT request for inserting rows(RowRegistration) as:-
 We can populate more containers like this. 
 
 
-* QUERY data via SELECT - first check with a simple query 
+*QUERY data via SELECT - first check with a simple query 
 
 We will try to assess some economic parameters of the countries in the World. 
 
-So, some of the data which contains health/medical will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing.   
+So, some of the data which contains health/medical will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing. 
 
-    **(i) **Let's check the countries with the highest per capita income , the indicatorcode for which is **NY.GNP.PCAP.CD**.  
-
+**(i)**  Now, let us check the countries with the highest per capita income, the indicatorcode for which is **NY.GNP.PCAP.CD** 
 
     mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 "  
 
@@ -263,7 +262,7 @@ The data that is returned is something like this:-
 ![alttext](images/Top10-per-capita.png "imagetooltip")
 
 
-    ghndata &lt;- qr1  
+    ghndata <- qr1  
 
 We just copied the data in a data frame ghndata. 
 
@@ -340,7 +339,7 @@ The bar plot looks like this:-  \
 
 
 
-* To Conclude, we have demonstrated the capabilities of GridDB, a fast in-memory database that lends itself well for not only fast querying but also analytics. 
+**To Conclude, we have demonstrated the capabilities of GridDB, a fast in-memory database that lends itself well for not only fast querying but also analytics. 
 
 GridDB can work with multiple languages and has data connectors for  most popular tools. 
 
