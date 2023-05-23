@@ -212,7 +212,7 @@ So, for us inserturl = containerurl+'GlobalHealthNutrition'+'/rows' OR  "baseurl
 
 We now have our PUT request for inserting rows(RowRegistration) as:- 
 
-    r &lt;- PUT(inserturl,  
+    r <- PUT(inserturl,  
        addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,              config = authenticate("pratik", "MyPASS1234"),  
 					body = ghndataJSON ,  
 					encode = "json" )  
@@ -251,7 +251,7 @@ To retrieve data from a container, the URL must be suffixed with "/sql" , so our
 
     #Invoke the GridDB WebAPI request 
 
-    qr1 &lt;- GET (url = myqueryurl, 
+    qr1 <- GET (url = myqueryurl, 
             addheaders("Content-Type" = "application/json; charset=UTF-8" ),       config = authenticate("pratik", "MyPASS1234"),        body = queryrequestbody
        )                              
 
