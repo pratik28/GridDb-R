@@ -1,6 +1,6 @@
 
 
-		Statistical analysis of GridDB data, using R
+		       Statistical analysis of GridDB data, using R
 
 **Introduction to GridDB.**
 
@@ -16,7 +16,7 @@ A group of such nodes is called "Cluster" , the cluster service is started when 
 ![alttext](images/arc_DataModel.png "imagetooltip")
 
 
-@Source: [https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html](https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html) \
+@Source: [https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html](https://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v432/GridDBQuickStartGuide.html) 
 
 
 Somewhat similar to the idea of a table in a relational database, GridDB gives the abstraction of a "container". 
@@ -35,7 +35,7 @@ Within a database, there might be multiple containers, akin to tables in a relat
 
 These containers hold the data in rows. 
 
-**Introduction to R 
+**Introduction to R** 
 
 R is a modern programming language, suitable for complex mathematical calculations, statistical analysis, creating charts and machine learning models. . 
 
@@ -51,7 +51,7 @@ We will discuss how you can create containers and save data in GridDb via its We
 
 
 
-*Install R and HTTR package and other packages 
+*Install R and HTTR package and other packages* 
 
 You can load additional packages via the "Load Packages" menu option under the "Packages" menu. 
 
@@ -63,7 +63,7 @@ We use Web API as its simple and relieves the need of using an additional databa
 
 Also, GridDB SE as well as GridDB AE both versions support Web APIs, whereas GridDB SE does not support JDBC/ODBC. 
 
-We can check if the required libraries HTTR and XML have been loaded in our R environment using the sessionInfo() command 
+We can check if the required libraries HTTR and XML have been loaded in our R environment using the *sessionInfo() command 
 
 The output of the sessionInfo() command looks like this on my windows machine.  
 
@@ -83,13 +83,13 @@ If you want to do this from the R command line instead, use the below commands t
 
     install.packages('jsonlite')
 
-    *Connect to GridDb via HTTPS connection ( Web API).  
+*Connect to GridDb via HTTPS connection ( Web API).*  
 
 This method gives maximum flexibility and ease as you're not dependent on any driver or technology to connect to the database.  
 
 You just use the simplest access methods via the secure Web API  
 
-The GridDB URLs are of the form :-  **'https://[host]/griddb/v2/[clustername]/dbs/[databasename]' **; where a cluster might be running multiple databases managed by a single  database server instance. 
+The GridDB URLs are of the form :-  **'https://[host]/griddb/v2/[clustername]/dbs/[databasename]'** ; where a cluster might be running multiple databases managed by a single  database server instance. 
 
 In my case, my base url looks like this:- 
 
@@ -113,7 +113,7 @@ While we're checking the web based access, we also confirm that secure authentic
 
 
 
-*The data to be used 
+*The data to be used* 
 
 The data that we are going to use for this demonstration is about some economic and demographic parameters, measured in the world's major countries between 1960-2015. 
 
@@ -206,9 +206,9 @@ Also, GridDB's web API gives you a simple URL to PUT to when you want to add row
 
 It takes the form of :- 
 
-**baseurl + '/containers/ContainerName/rows'
+**baseurl + '/containers/ContainerName/rows'** 
 
-So, for us inserturl = containerurl+'GlobalHealthNutrition'+'/rows' OR  "baseurl/containers/GlobalHealthNutrition/rows" 
+So, for us inserturl = containerurl+'GlobalHealthNutrition'+'/rows'  OR   "baseurl/containers/GlobalHealthNutrition/rows" 
 
 We now have our PUT request for inserting rows(RowRegistration) as:- 
 
@@ -328,7 +328,7 @@ Our bar plot function will look like:-
 
     barplot( ghndata$$Percent, main="Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions", names.arg = ghndata$CountryCode, xlab="CountryName", ylab="Percent of Total", col="blue", args.legend="bottomright" ) 
 
-The bar plot looks like this:-  \
+The bar plot looks like this:-  
 
 
 
@@ -339,7 +339,7 @@ The bar plot looks like this:-  \
 
 
 
-**To Conclude, we have demonstrated the capabilities of GridDB, a fast in-memory database that lends itself well for not only fast querying but also analytics. 
+**To Conclude,** we have demonstrated the capabilities of GridDB, a fast in-memory database that lends itself well for not only fast querying but also analytics. 
 
 GridDB can work with multiple languages and has data connectors for  most popular tools. 
 
