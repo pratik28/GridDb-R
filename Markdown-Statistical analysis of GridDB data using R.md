@@ -47,24 +47,25 @@ You can see that the required packages were loaded under the "other attached pac
     install.packages('jsonlite')
 
 *Connect to GridDb via HTTPS connection ( Web API).*  
-This method gives maximum flexibility and ease as you're not dependent on any driver or technology to connect to the database. You just use the simplest access methods via the secure Web API. 
+This method gives maximum flexibility and ease as you're not dependent on any driver or technology to connect to the database. You just use the simplest access methods via the secure Web API.  
+
 The GridDB URLs are of the form :-  **'https://[host]/griddb/v2/[clustername]/dbs/[databasename]'** ; where a cluster might be running multiple databases managed by a single  database server instance.  
 In my case, my base url looks like this:- 
     baseurl = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gsclustertrialxxxx/dbs/pratik"  
     
 Lets first check if GridDb allows you a connection, we will check this via the checkConnection method of the Web API.   
-     r <- GET(
-	 url = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gsclustertrialxxxx/dbs/pratik/checkConnection" ,
-         addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,     
-         config = authenticate("pratik", "MyPASS1234"), 
-         encode = "json" 
+
+        r <- GET(
+  	 url = "https://cloud1.griddb.com/trialxxxx/griddb/v2/gsclustertrialxxxx/dbs/pratik/checkConnection" ,
+           addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,     
+           config = authenticate("pratik", "MyPASS1234"), 
+           encode = "json" 
       )
     print( r )  
 
 If you see a "Status: 200" in the printed response, the server is ready to accept your connections. While we're checking the web based access, we also confirm that secure authenticated access via HTTPS is available , as we provide the username/password. 
 
 *The data to be used* 
-
 The data that we are going to use for this demonstration is about some economic and demographic parameters, measured in the world's major countries between 1960-2015. 
 Below is a snippet about the same:-  
 
@@ -108,7 +109,8 @@ To hold this data we must create a container(~table ) in GridDB. So, we send a P
 
 To check if the container was indeed created, you can use the "showcontainer" command, it will list all the containers in your database. 
 Now lets define a function to insert data into the GridDB database. We will use R language's innate ability to process CSV files here. 
-Instead of adding rows to a database table 1 by 1 OR creating a huge POST request, we just tell R to use a CSV file, and the language takes care of adding the rows on its own.  We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a full fledged data frame), a tibble is a simple data structure and can easily be fed to a POST Web API request. 
+Instead of adding rows to a database table 1 by 1 OR creating a huge POST request, we just tell R to use a CSV file, and the language takes care of adding the rows on its own.  
+We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a full fledged data frame), a tibble is a simple data structure and can easily be fed to a POST Web API request. 
 
     library(readr)
     library(jsonlite)
@@ -118,7 +120,8 @@ Instead of adding rows to a database table 1 by 1 OR creating a huge POST reques
     ghndataJSON <- toJSON(ghndata) 
 
 Now we have all the CSV data in JSON format, ready to be used in the web request. 
-When POST()ing, you can include data in the body of the request. httr allows you to supply this in a number of different ways like named list, string or data frame etc. Also, GridDB's web API gives you a simple URL to PUT to when you want to add rows ( populate) data into containers. 
+When POST()ing, you can include data in the body of the request. httr allows you to supply this in a number of different ways like named list, string or data frame etc. Also, GridDB's web API gives you a simple URL to PUT to when you want to add rows ( populate) data into containers.  
+
 It takes the form of :- 
 **baseurl + '/containers/ContainerName/rows'** 
 
@@ -141,6 +144,7 @@ We now have our PUT request for inserting rows(RowRegistration) as:-
 
 *QUERY data via SELECT - first check with a simple query* 
 We will try to assess some economic parameters of the countries in the World. So, some of the data which contains health/medical will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing. 
+
 **(i)**  Now, let us check the countries with the highest per capita income, the indicatorcode for which is **NY.GNP.PCAP.CD** 
     mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 "  
 
@@ -166,6 +170,7 @@ The data that is returned is something like this:-
 We just copied the data in a data frame ghndata. To get a subset of ghndata, like all country names, we can just use ghndata$CountryName. 
 Now let's plot this data using the barplot function of R.  Unless you visualize something via pictures/charts, the inherent message is either not very clear or you miss the audacity of the results.  
 The general syntax of this function is:- 
+
 **barplot(H, xlab, ylab, main, names.arg, col, args.legend)** where 
 **H:** This parameter is a vector or a matrix containing numeric values which are used in a bar chart.   
 **xlab** and **ylab **are labels of x-axis and y-axis repectively 
@@ -196,8 +201,9 @@ The above image shows the data and the shortened bar graph, the actual full char
 **(ii)**  Let's fire another query on GridDB, and analyze the results via R and plot the results . 
 We will find the top countries based on the factor "Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total) ". 
 This data, e.g., is important for organizations working on public health, specially in poorer countries. 
+
 Keeping the other calls same, we just change the query to ( only bottom 20 results) :- 
-    mysqlquery2 =  "SELECT countryname, countrycode,  score2014 FROM GlobalHealthNutrition where indicatorcode=\\'SH.DTH.COMM.ZS\\' ORDER BY score2014 DESC  LIMIT 20 " 
+       mysqlquery2 =  "SELECT countryname, countrycode,  score2014 FROM GlobalHealthNutrition where indicatorcode=\\'SH.DTH.COMM.ZS\\' ORDER BY score2014 DESC     LIMIT 20 " 
 Our bar plot function will look like:- 
 
     barplot( ghndata$$Percent, main="Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions", names.arg = ghndata$CountryCode, xlab="CountryName", ylab="Percent of Total", col="blue", args.legend="bottomright" ) 
