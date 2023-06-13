@@ -120,11 +120,12 @@ We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a
     #Convert the CSV to Json format and verify it worked by printing
     ghndataJSON <- toJSON(ghndata, auto_unbox=TRUE, flatten=TRUE) 
 
-GridDb web API expects incoming JSON to be in the array format, i.e. * [      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ] *  
+GridDb web API expects incoming JSON to be in the array format, i.e. *[      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ]*  
 *(Ref:- http://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v4_3/GridDB_Web_API_Reference.html#ロウ登録)* 
 
 Hence we use the *auto_unbox=TRUE* and *flatten=TRUE* . 
 Better still, you can directly use the *"sample-input.json"* provided with this package.  
+
     library(readr)
     library(jsonlite)
     #Directly read from Json file, which is already in array format 
