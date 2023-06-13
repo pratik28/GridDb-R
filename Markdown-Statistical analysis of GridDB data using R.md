@@ -35,13 +35,14 @@ We will discuss how you can create containers and save data in GridDb via its We
 
 You can load additional packages via the "Load Packages" menu option under the "Packages" menu. We choose HTTR as we will connect to GridDB cloud instances via GridDB's web API. We will also use some other packages like "readr" and "jsonlite" etc. , for reading CSV files and processing JSON respectively.                           
 We use Web API as its simple and relieves the need of using an additional database connectivity package ODBC/JDBC. Also, GridDB SE as well as GridDB AE both versions support Web APIs, whereas GridDB SE does not support JDBC/ODBC. 
-We can check if the required libraries HTTR and XML have been loaded in our R environment using the *sessionInfo() command 
+We can check if the required libraries HTTR and XML have been loaded in our R environment using the *sessionInfo()* command.  
 The output of the sessionInfo() command looks like this on my windows machine.  
 
 
 ![alttext](images/sessionInfo-output.png "imagetooltip")
 
-You can see that the required packages were loaded under the "other attached packages:" section. If you want to do this from the R command line instead, use the below commands to install and include packages in your code. 
+You can see that the required packages were loaded under the "other attached packages:" section. If you want to do this from the R command line instead, use the below commands to install and include packages in your code.  
+
     install packages('httrr')
     install packages('readr')
     install.packages('jsonlite')
@@ -65,7 +66,7 @@ Lets first check if GridDb allows you a connection, we will check this via the c
 
 If you see a "Status: 200" in the printed response, the server is ready to accept your connections. While we're checking the web based access, we also confirm that secure authenticated access via HTTPS is available , as we provide the username/password. 
 
-*The data to be used* 
+*The data to be used* :- 
 The data that we are going to use for this demonstration is about some economic and demographic parameters, measured in the world's major countries between 1960-2015. 
 Below is a snippet about the same:-  
 
@@ -87,7 +88,7 @@ To hold this data we must create a container(~table ) in GridDB. So, we send a P
 	{ 	"name": "indicatorname" 	"type": "STRING"   	},    
 	
 	{	"name": "indicatorcode"	"type": " "    	},  
-	{	"name": "1960"	"type": "FLOAT"    	},  
+	{	"name": "score1960"	"type": "FLOAT"    	},  
 	{	"name": "score1961"	"type": "FLOAT"    	},    
 	{	"name": "score1962"	"type": "FLOAT"    	},  
 	....... 
@@ -107,7 +108,7 @@ To hold this data we must create a container(~table ) in GridDB. So, we send a P
         encode = "json", 
         data= mydataobj)
 
-To check if the container was indeed created, you can use the "showcontainer" command, it will list all the containers in your database. 
+To check if the container was indeed created, you can use the *showcontainer* command, it will list all the containers in your database. 
 Now lets define a function to insert data into the GridDB database. We will use R language's innate ability to process CSV files here. 
 Instead of adding rows to a database table 1 by 1 OR creating a huge POST request, we just tell R to use a CSV file, and the language takes care of adding the rows on its own.  
 We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a full fledged data frame), a tibble is a simple data structure and can easily be fed to a POST Web API request. 
@@ -117,16 +118,26 @@ We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a
     #import data in csv format
     ghndata <- readcsv("data.csv") 
     #Convert the CSV to Json format and verify it worked by printing
-    ghndataJSON <- toJSON(ghndata) 
+    ghndataJSON <- toJSON(ghndata, auto_unbox=TRUE, flatten=TRUE) 
 
+GridDb web API expects incoming JSON to be in the array format, i.e. [      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ] 
+*(Ref:- http://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v4_3/GridDB_Web_API_Reference.html#ロウ登録)* 
+Hence we use the *auto_unbox=TRUE* and *flatten=TRUE* . 
+
+Better still, you can directly use the *"sample-input.json"* provided with this package. 
+    library(readr)
+    library(jsonlite)
+    #Directly read from Json file, which is already in array format 
+    ghndataJSON <- fromJSON("sample-input.json") 
+    
 Now we have all the CSV data in JSON format, ready to be used in the web request. 
-When POST()ing, you can include data in the body of the request. httr allows you to supply this in a number of different ways like named list, string or data frame etc. Also, GridDB's web API gives you a simple URL to PUT to when you want to add rows ( populate) data into containers.  
+When POSTing, you can include data in the body of the request. httr allows you to supply this in a number of different ways like named list, string or data frame etc. Also, GridDB's web API gives you a simple URL to PUT to when you want to add rows ( populate) data into containers.  
 
 It takes the form of :- 
 **baseurl + '/containers/ContainerName/rows'** 
 
-So, for us inserturl = containerurl+'GlobalHealthNutrition'+'/rows'  OR   "baseurl/containers/GlobalHealthNutrition/rows". 
-We now have our PUT request for inserting rows(RowRegistration) as:- 
+So, for us *inserturl = containerurl+'GlobalHealthNutrition'+'/rows'  OR   "baseurl/containers/GlobalHealthNutrition/rows"* . 
+We now have our PUT request for inserting rows(called RowRegistration in GridDB's parlance) as:- 
 
     r <- PUT(inserturl,  
              addheaders("Content-Type" = "application/json; charset=UTF-8" ) ,              
@@ -140,15 +151,17 @@ We now have our PUT request for inserting rows(RowRegistration) as:-
 
 ![alttext](images/rows-inserted.png "imagetooltip")
 
- We can populate more containers like this. 
+ We can populate more containers like this, and then query the data via SELECT statements. 
 
 *QUERY data via SELECT - first check with a simple query* 
-We will try to assess some economic parameters of the countries in the World. So, some of the data which contains health/medical will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing. 
 
-**(i)**  Now, let us check the countries with the highest per capita income, the indicatorcode for which is **NY.GNP.PCAP.CD** 
-    mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 "  
+We will try to assess some economic parameters of the countries in the World. So, some of the data which contains health/medical statistics will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing. 
 
-We use a single "\\" to escape the single quote in the above statement. To retrieve data from a container, the URL must be suffixed with "/sql" , so our 
+**(i)**  Now, let us check the countries with the highest per capita income, the indicator code for which is **NY.GNP.PCAP.CD** 
+
+    *mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 " * 
+
+We use a single "\\" to escape the single quote in the above statement. To retrieve data from a container, the request URL must be suffixed with "/sql" , so our 
 
     myqueryurl = baseurl + '/sql' 
     #Construct the request body,  remember we're using the web API and cannot use inbuilt R functions like dbGetQuery()/dbInsertTable(),  hence we construct the request as below. 
@@ -162,6 +175,7 @@ We use a single "\\" to escape the single quote in the above statement. To retri
     print(qr1) 
 
 The data that is returned is something like this:- 
+
 ![alttext](images/Top10-per-capita.png "imagetooltip")
 
 
@@ -169,14 +183,19 @@ The data that is returned is something like this:-
 
 We just copied the data in a data frame ghndata. To get a subset of ghndata, like all country names, we can just use ghndata$CountryName. 
 Now let's plot this data using the barplot function of R.  Unless you visualize something via pictures/charts, the inherent message is either not very clear or you miss the audacity of the results.  
-The general syntax of this function is:- 
+The general syntax of this bar plot function is:- 
 
 **barplot(H, xlab, ylab, main, names.arg, col, args.legend)** where 
 **H:** This parameter is a vector or a matrix containing numeric values which are used in a bar chart.   
+
 **xlab** and **ylab **are labels of x-axis and y-axis repectively 
+
 **main**: chart title 
+
 **names.arg**: Cector of names or strings, appearing under each bar 
+
 **col**: color of the bars 
+
 **args.legend**: optional, determines where the legend will be placed and displayed.  
 
     # print ghndata and countrynames, just for illustrating the data , then plot the graph 
@@ -199,11 +218,12 @@ The above image shows the data and the shortened bar graph, the actual full char
 
 
 **(ii)**  Let's fire another query on GridDB, and analyze the results via R and plot the results . 
-We will find the top countries based on the factor "Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total) ". 
+We will find the top countries based on the factor *"Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions (% of total) "* . 
 This data, e.g., is important for organizations working on public health, specially in poorer countries. 
 
 Keeping the other calls same, we just change the query to ( only bottom 20 results) :- 
-       mysqlquery2 =  "SELECT countryname, countrycode,  score2014 FROM GlobalHealthNutrition where indicatorcode=\\'SH.DTH.COMM.ZS\\' ORDER BY score2014 DESC     LIMIT 20 " 
+
+    mysqlquery2 =  "SELECT countryname, countrycode,  score2014 FROM GlobalHealthNutrition where indicatorcode=\\'SH.DTH.COMM.ZS\\' ORDER BY score2014 DESC     LIMIT 20 " . 
 Our bar plot function will look like:- 
 
     barplot( ghndata$$Percent, main="Cause of death, by communicable diseases and maternal, prenatal and nutrition conditions", names.arg = ghndata$CountryCode, xlab="CountryName", ylab="Percent of Total", col="blue", args.legend="bottomright" ) 
