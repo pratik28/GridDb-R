@@ -120,14 +120,11 @@ We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a
     #Convert the CSV to Json format and verify it worked by printing
     ghndataJSON <- toJSON(ghndata, auto_unbox=TRUE, flatten=TRUE) 
 
-GridDb web API expects incoming JSON to be in the array format, i.e. * [      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ] * 
-
+GridDb web API expects incoming JSON to be in the array format, i.e. * [      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ] *  
 *(Ref:- http://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v4_3/GridDB_Web_API_Reference.html#ロウ登録)* 
 
 Hence we use the *auto_unbox=TRUE* and *flatten=TRUE* . 
-
 Better still, you can directly use the *"sample-input.json"* provided with this package.  
-
     library(readr)
     library(jsonlite)
     #Directly read from Json file, which is already in array format 
@@ -137,10 +134,8 @@ Now we have all the CSV data in JSON format, ready to be used in the web request
 When POSTing, you can include data in the body of the request. httr allows you to supply this in a number of different ways like named list, string or data frame etc. Also, GridDB's web API gives you a simple URL to PUT to when you want to add rows ( populate) data into containers.  
 
 It takes the form of :- 
-**baseurl + '/containers/ContainerName/rows'** 
-
+**baseurl + '/containers/ContainerName/rows'**  
 So, for us *inserturl = containerurl+'GlobalHealthNutrition'+'/rows'  OR   "baseurl/containers/GlobalHealthNutrition/rows"* . 
-
 We now have our PUT request for inserting rows(called RowRegistration in GridDB's parlance) as:- 
 
     r <- PUT(inserturl,  
@@ -158,7 +153,6 @@ We now have our PUT request for inserting rows(called RowRegistration in GridDB'
  We can populate more containers like this, and then query the data via SELECT statements. 
 
 *QUERY data via SELECT - first check with a simple query* 
-
 We will try to assess some economic parameters of the countries in the World. So, some of the data which contains health/medical statistics will not be used, but we keep it for future use. Also, we will be using comparatively recent data from after 2010, and leave the data from 1960-2009. Another reason for leaving the historical data is that some older statistics/numbers for many countries are missing. 
 
 **(i)**  Now, let us check the countries with the highest per capita income, the indicator code for which is **NY.GNP.PCAP.CD** 
@@ -191,11 +185,11 @@ The general syntax of this bar plot function is:-
 
 **barplot(H, xlab, ylab, main, names.arg, col, args.legend)** where 
 
-**H:** This parameter is a vector or a matrix containing numeric values which are used in a bar chart.   
+**H:** This parameter is a vector or a matrix containing numeric values which are used in a bar chart.
 **xlab** and **ylab** are labels of x-axis and y-axis repectively 
 **main**: chart title 
 **names.arg**: Cector of names or strings, appearing under each bar 
-**col**: color of the bars \
+**col**: color of the bars 
 **args.legend**: optional, determines where the legend will be placed and displayed.  
 
     # print ghndata and countrynames, just for illustrating the data , then plot the graph 
