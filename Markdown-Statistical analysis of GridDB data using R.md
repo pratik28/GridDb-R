@@ -120,11 +120,14 @@ We use readcsv function of R, which reads a CSV and returns a **tibble** ( not a
     #Convert the CSV to Json format and verify it worked by printing
     ghndataJSON <- toJSON(ghndata, auto_unbox=TRUE, flatten=TRUE) 
 
-GridDb web API expects incoming JSON to be in the array format, i.e. [      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ] 
+GridDb web API expects incoming JSON to be in the array format, i.e. * [      "Arab World" , ,      "ARB" ,   "Adolescent fertility rate (births per 1 , 000 women ages 15-19)" ,  "SP.ADO.TFRT" , 133.55 ,  134.15 ,  134.85 ,  134.50 ,  ............. 48.19 ,  0.0 ] * 
+
 *(Ref:- http://www.toshiba-sol.co.jp/en/pro/griddb/docs-en/v4_3/GridDB_Web_API_Reference.html#ロウ登録)* 
+
 Hence we use the *auto_unbox=TRUE* and *flatten=TRUE* . 
 
-Better still, you can directly use the *"sample-input.json"* provided with this package. 
+Better still, you can directly use the *"sample-input.json"* provided with this package.  
+
     library(readr)
     library(jsonlite)
     #Directly read from Json file, which is already in array format 
@@ -137,6 +140,7 @@ It takes the form of :-
 **baseurl + '/containers/ContainerName/rows'** 
 
 So, for us *inserturl = containerurl+'GlobalHealthNutrition'+'/rows'  OR   "baseurl/containers/GlobalHealthNutrition/rows"* . 
+
 We now have our PUT request for inserting rows(called RowRegistration in GridDB's parlance) as:- 
 
     r <- PUT(inserturl,  
@@ -159,9 +163,9 @@ We will try to assess some economic parameters of the countries in the World. So
 
 **(i)**  Now, let us check the countries with the highest per capita income, the indicator code for which is **NY.GNP.PCAP.CD** 
 
-    *mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 " * 
+     mysqlquery1 = "SELECT countryname, countrycode,  score2015 FROM GlobalHealthNutrition where indicatorcode=\\'NY.GNP.PCAP.CD\\'   LIMIT 10 "  
 
-We use a single "\\" to escape the single quote in the above statement. To retrieve data from a container, the request URL must be suffixed with "/sql" , so our 
+We use a single "\\" to escape the single quote in the above statement. To retrieve data from a container, the request URL must be suffixed with "/sql" , so our code will be something like this :-  
 
     myqueryurl = baseurl + '/sql' 
     #Construct the request body,  remember we're using the web API and cannot use inbuilt R functions like dbGetQuery()/dbInsertTable(),  hence we construct the request as below. 
@@ -174,7 +178,7 @@ We use a single "\\" to escape the single quote in the above statement. To retri
        )                         
     print(qr1) 
 
-The data that is returned is something like this:- 
+The data that is returned is something like this :- 
 
 ![alttext](images/Top10-per-capita.png "imagetooltip")
 
@@ -186,16 +190,12 @@ Now let's plot this data using the barplot function of R.  Unless you visualize 
 The general syntax of this bar plot function is:- 
 
 **barplot(H, xlab, ylab, main, names.arg, col, args.legend)** where 
+
 **H:** This parameter is a vector or a matrix containing numeric values which are used in a bar chart.   
-
-**xlab** and **ylab **are labels of x-axis and y-axis repectively 
-
+**xlab** and **ylab** are labels of x-axis and y-axis repectively 
 **main**: chart title 
-
 **names.arg**: Cector of names or strings, appearing under each bar 
-
-**col**: color of the bars 
-
+**col**: color of the bars \
 **args.legend**: optional, determines where the legend will be placed and displayed.  
 
     # print ghndata and countrynames, just for illustrating the data , then plot the graph 
