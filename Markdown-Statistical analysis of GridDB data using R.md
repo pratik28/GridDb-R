@@ -187,10 +187,15 @@ The general syntax of this bar plot function is:-
 **barplot(H, xlab, ylab, main, names.arg, col, args.legend)** where 
 
 **H:** This parameter is a vector or a matrix containing numeric values which are used in a bar chart. 
-**xlab** and **ylab** are labels of x-axis and y-axis repectively 
-**main**: chart title 
-**names.arg**: Cector of names or strings, appearing under each bar 
-**col**: color of the bars 
+
+**xlab** and **ylab** are labels of x-axis and y-axis repectively  
+
+**main**: chart title  
+
+**names.arg**: Cector of names or strings, appearing under each bar  
+
+**col**: color of the bars  
+
 **args.legend**: optional, determines where the legend will be placed and displayed.  
 
     # print ghndata and countrynames, just for illustrating the data , then plot the graph 
